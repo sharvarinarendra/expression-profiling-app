@@ -463,7 +463,7 @@ heatmap_tab_func <- function(tabpan_title, cellt_in1, gene_in1, reset_in, top_mo
                                                     selectizeInput(scale_in,
                                                                    label = "Scale : ",
                                                                    choices = list("column", "row", "none"),
-                                                                   options = list(create = TRUE),
+                                                             #      options = list(create = TRUE),
                                                                    multiple = FALSE,
                                                                    selected = "none"
                                                     )
@@ -1007,24 +1007,36 @@ server <- function(input, output, session) {
       req(input$dp_gene)
       req(input$dp_cellty)
       
-      cellt_exprs_comb <- dotplot_cellt_func(input$dp_gene, input$dp_cellty)
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
       
-      scatterD3(x = cellt_exprs_comb$Gene, y = cellt_exprs_comb$CellTypes, 
-                col_var = cellt_exprs_comb$Avg_Expression,
-                size_var = cellt_exprs_comb$Percent_Expression,
-                xlab = "Gene", ylab = "Cell Types", col_lab = "Avg Expression",
-                size_lab = "% Expression",
-                tooltip_text = paste0("Avg Expression: ", 
-                                      round(cellt_exprs_comb$Avg_Expression,3), "</strong><br /> ",
-                                      "% Expression: ", 
-                                      round(cellt_exprs_comb$Percent_Expression,3), "<br />",
-                                      "Cell Type: ", cellt_exprs_comb$CellTypes),
-                caption = list(title = paste0("Gene : ", input$dp_gene), 
-                               subtitle = paste0("Cell Type : ", input$dp_cellty)),
-                left_margin = input$leftmarg_dotp_cellt,
-                col_continuous = TRUE,
-                colors = color_dotplot_cell()) 
-      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
+       
+        cellt_exprs_comb <- dotplot_cellt_func(input$dp_gene, input$dp_cellty)
+        scatterD3(x = cellt_exprs_comb$Gene, y = cellt_exprs_comb$CellTypes, 
+                  col_var = cellt_exprs_comb$Avg_Expression,
+                  size_var = cellt_exprs_comb$Percent_Expression,
+                  xlab = "Gene", ylab = "Cell Types", col_lab = "Avg Expression",
+                  size_lab = "% Expression",
+                  tooltip_text = paste0("Avg Expression: ", 
+                                        round(cellt_exprs_comb$Avg_Expression,3), "</strong><br /> ",
+                                        "% Expression: ", 
+                                        round(cellt_exprs_comb$Percent_Expression,3), "<br />",
+                                        "Cell Type: ", cellt_exprs_comb$CellTypes),
+                  caption = list(title = paste0("Gene : ", input$dp_gene), 
+                                 subtitle = paste0("Cell Type : ", input$dp_cellty)),
+                  left_margin = input$leftmarg_dotp_cellt,
+                  col_continuous = TRUE,
+                  colors = color_dotplot_cell()) 
     }
   )
   
@@ -1033,6 +1045,20 @@ server <- function(input, output, session) {
     options = list(scrollX = TRUE),{
       req(input$dp_gene)
       req(input$dp_cellty)
+      
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
       
       cellt_exprs_comb <- dotplot_cellt_func(input$dp_gene, input$dp_cellty)
       
@@ -1049,6 +1075,20 @@ server <- function(input, output, session) {
     content = function(file) {
       req(input$dp_gene)
       req(input$dp_cellty)
+      
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
       
       cellt_exprs_comb <- dotplot_cellt_func(input$dp_gene, input$dp_cellty)
       
@@ -1116,6 +1156,20 @@ server <- function(input, output, session) {
       req(input$dp_cellty)
       req(input$age_dotp_list)
       
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
+      
       age_comb_df <- dotplot_age_func(input$dp_gene, input$dp_cellty)
       
       if (input$age_dotp_list == "All Ages") {
@@ -1165,6 +1219,20 @@ server <- function(input, output, session) {
       req(input$dp_cellty)
       req(input$age_dotp_list)
       
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
+      
       age_comb_df <- dotplot_age_func(input$dp_gene, input$dp_cellty)
       
       if (input$age_dotp_list == "All Ages") {
@@ -1188,6 +1256,20 @@ server <- function(input, output, session) {
       req(input$dp_gene)
       req(input$dp_cellty)
       req(input$age_dotp_list)
+      
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
       
       age_comb_df <- dotplot_age_func(input$dp_gene, input$dp_cellty)
       
@@ -1252,6 +1334,20 @@ server <- function(input, output, session) {
       req(input$gene_samp_inp)
       req(input$cellty_samp_inp)
       req(input$sample_exprs_type)
+      
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
       
       samp_scd3_data <- dotplot_data_in_avg_func(input$gene_samp_inp, input$cellty_samp_inp)
       samp_scd3_data_p <- dotplot_data_in_perc_func(input$gene_samp_inp, input$cellty_samp_inp)
@@ -1435,6 +1531,20 @@ server <- function(input, output, session) {
     req(input$cellty_samp_inp)
     req(input$sample_exprs_type)
     
+    for (i in input$dp_gene) {
+      if (!(i %in% gene_names_old)) {
+        validate("Data on at least one of the input genes are not found in this dataset")
+      }
+    }
+    
+    for (i in input$dp_cellty) {
+      if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                     "All Hematopoeitic Cells", "All Endothelial Cells",
+                     "All Mesenchymal Cells", "All Epithelial Cells"))) {
+        validate("Data on at least one of the input cell types are not found in this dataset")
+      }
+    }
+    
     dotplot_samp_stat_func(input$gene_samp_inp, input$cellty_samp_inp, 
                                    input$sample_exprs_type, input$color_samp_dotp,
                                    input$point_size_sample, input$leftmarg_dotp_sample)
@@ -1450,6 +1560,20 @@ server <- function(input, output, session) {
       req(input$gene_samp_inp)
       req(input$cellty_samp_inp)
       req(input$sample_exprs_type)
+      
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
       
       scp <- dotplot_samp_stat_func(input$gene_samp_inp, input$cellty_samp_inp, 
                              input$sample_exprs_type, input$color_samp_dotp,
@@ -1489,6 +1613,20 @@ server <- function(input, output, session) {
       req(input$cellty_samp_inp)
       req(input$sample_exprs_type)
       
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
+      
       dotplot_sample_func(input$gene_samp_inp, input$cellty_samp_inp, input$sample_exprs_type)
       
     }
@@ -1505,6 +1643,20 @@ server <- function(input, output, session) {
       req(input$gene_samp_inp)
       req(input$cellty_samp_inp)
       req(input$sample_exprs_type)
+      
+      for (i in input$dp_gene) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$dp_cellty) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
       
       write.table(dotplot_sample_func(input$gene_samp_inp, input$cellty_samp_inp, 
                                       input$sample_exprs_type), file, quote = F)
@@ -1673,6 +1825,20 @@ server <- function(input, output, session) {
   # average expression heatmap
   output$heatmap_plot_avg <- renderPlot({
     
+    for (i in input$genes_hp_avg1) {
+      if (!(i %in% gene_names_old)) {
+        validate("Data on at least one of the input genes are not found in this dataset")
+      }
+    }
+    
+    for (i in input$cell_type_hp_avg1) {
+      if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                     "All Hematopoeitic Cells", "All Endothelial Cells",
+                     "All Mesenchymal Cells", "All Epithelial Cells"))) {
+        validate("Data on at least one of the input cell types are not found in this dataset")
+      }
+    }
+    
     heatmap_output_func(exprs_mat_avg, input$cell_type_hp_avg1, input$genes_hp_avg1,
                         input$clust_row_hp_avg, color_heatmap_avg(), input$scale_hp_avg, 
                         input$clust_col_hp_avg, input$cell_type_hp_avg2, input$genes_hp_avg2)
@@ -1681,6 +1847,20 @@ server <- function(input, output, session) {
   
   # percent expression heatmap
   output$heatmap_plot <- renderPlot({
+    
+    for (i in input$genes_hp2) {
+      if (!(i %in% gene_names_old)) {
+        validate("Data on at least one of the input genes are not found in this dataset")
+      }
+    }
+    
+    for (i in input$cell_type_hp2) {
+      if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                     "All Hematopoeitic Cells", "All Endothelial Cells",
+                     "All Mesenchymal Cells", "All Epithelial Cells"))) {
+        validate("Data on at least one of the input cell types are not found in this dataset")
+      }
+    }
     
     heatmap_output_func(exprs_mat, input$cell_type_hp2, input$genes_hp2,
                         input$clust_row_hp, color_heatmap(), input$scale_hp, input$clust_col_hp,
@@ -1693,6 +1873,20 @@ server <- function(input, output, session) {
     filename = function() { paste('heatmap_avg.png') },
     content = function(file) {
       png(file)
+      
+      for (i in input$genes_hp_avg1) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$cell_type_hp_avg1) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
       
       heatmap_output_func(exprs_mat_avg, input$cell_type_hp_avg1, input$genes_hp_avg1,
                           input$clust_row_hp_avg, color_heatmap_avg(), input$scale_hp_avg, 
@@ -1707,6 +1901,20 @@ server <- function(input, output, session) {
     filename = function() { paste('heatmap.png') },
     content = function(file) {
       png(file)
+      
+      for (i in input$genes_hp2) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$cell_type_hp2) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
       
       heatmap_output_func(exprs_mat, input$cell_type_hp2, input$genes_hp2,
                           input$clust_row_hp, color_heatmap(), input$scale_hp, input$clust_col_hp,
@@ -1796,6 +2004,20 @@ server <- function(input, output, session) {
   output$heatmap_data_avg <- DT::renderDataTable(
     options = list(scrollX = TRUE),
     {
+      for (i in input$genes_hp_avg1) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$cell_type_hp_avg1) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
+      
       heatmap_data_out_func(exprs_mat_avg, input$cell_type_hp_avg1, input$genes_hp_avg1,
                             input$clust_row_hp_avg, input$scale_hp_avg, 
                             input$clust_col_hp_avg, input$cell_type_hp_avg2, input$genes_hp_avg2)
@@ -1807,6 +2029,20 @@ server <- function(input, output, session) {
   output$heatmap_data <- DT::renderDataTable(
     options = list(scrollX = TRUE),
     {
+      for (i in input$genes_hp2) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$cell_type_hp2) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
+      
       heatmap_data_out_func(exprs_mat, input$cell_type_hp2, input$genes_hp2,
                             input$clust_row_hp, input$scale_hp, input$clust_col_hp,
                             input$cell_type_hp1, input$genes_hp1)
@@ -1820,6 +2056,21 @@ server <- function(input, output, session) {
       paste("heatmap_data_avg.txt")
     },
     content = function(file) {
+      
+      for (i in input$genes_hp_avg1) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$cell_type_hp_avg1) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
+      
       write.table(heatmap_data_out_func(exprs_mat_avg, input$cell_type_hp_avg1, input$genes_hp_avg1,
                                         input$clust_row_hp_avg, input$scale_hp_avg, 
                                         input$clust_col_hp_avg, input$cell_type_hp_avg2, 
@@ -1834,6 +2085,20 @@ server <- function(input, output, session) {
       paste("heatmap_data.txt")
     },
     content = function(file) {
+      for (i in input$genes_hp2) {
+        if (!(i %in% gene_names_old)) {
+          validate("Data on at least one of the input genes are not found in this dataset")
+        }
+      }
+      
+      for (i in input$cell_type_hp2) {
+        if (!(i %in% c(cells_list, celltypes_old, "All Cell Types",
+                       "All Hematopoeitic Cells", "All Endothelial Cells",
+                       "All Mesenchymal Cells", "All Epithelial Cells"))) {
+          validate("Data on at least one of the input cell types are not found in this dataset")
+        }
+      }
+      
       write.table(heatmap_data_out_func(exprs_mat, input$cell_type_hp2, input$genes_hp2,
                                         input$clust_row_hp, input$scale_hp, input$clust_col_hp,
                                         input$cell_type_hp1, input$genes_hp1),
